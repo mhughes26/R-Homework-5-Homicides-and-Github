@@ -12,6 +12,6 @@ library(tigris)
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, options(tigris_use_cache = TRUE))
 ```
 
