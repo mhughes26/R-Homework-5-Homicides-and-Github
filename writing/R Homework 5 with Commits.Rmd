@@ -18,3 +18,9 @@ knitr::opts_chunk$set(echo = TRUE, options(tigris_use_cache = TRUE))
 ```{r}
 cities <- read_csv("../data/homicide-data.csv")
 ```
+```{r}
+denver <- cities %>% 
+  filter(city == "Denver") %>% 
+  select(lat, lon, disposition, victim_race)
+denver
+```
