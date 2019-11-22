@@ -24,3 +24,10 @@ denver <- cities %>%
   select(lat, lon, disposition, victim_race)
 denver
 ```
+```{r}
+denver <- denver %>% 
+  group_by(victim_race) %>% 
+  mutate(count = n()) %>% #This function counted the number of homicides per race.
+  arrange(desc(count)) %>% #This showed the race with the highest number of homicides on top. 
+```
+
