@@ -4,9 +4,66 @@ author: "Matthew Hughes"
 date: "November 11, 2019"
 output: word_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include = FALSE}
+library(tidyverse)
+library(sf)
+library(tigris)
 ```
 
-fdsafdsfasd
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, options(tigris_use_cache = TRUE))
+```
+
+```{r}
+cities <- read_csv("../data/homicide-data.csv")
+```
+```{r}
+denver <- cities %>% 
+  filter(city == "Denver") %>% 
+  select(lat, lon, disposition, victim_race)
+denver
+```
+```{r}
+denver <- denver %>% 
+  group_by(victim_race) %>% 
+  mutate(count = n()) %>% #This function counted the number of homicides per race.
+  arrange(desc(count)) %>% #This showed the race with the highest number of homicides on top. 
+  ungroup() %>% #Ungrouping keeps the data clean. 
+  filter(victim_race == c("Black", "White", "Hispanic")) 
+denver
+```
+```{r}
+denver_crs <- denver %>% 
+  filter(!is.na(lat)) %>% 
+  st_as_sf(coords = c("lon", "lat")) %>% 
+  st_set_crs(4269)
+```
+
+
+```{r}
+denver_zip <- zctas(cb = TRUE, starts_with = "802", 
+                    class = "sf")
+plot(denver_zip)
+```
+```{r}
+#Separating the homicides into unsolved and solved. 
+denver_disp <- denver_crs %>% 
+  mutate(disposition = factor(disposition, levels = c("Closed without arrest",
+                                                      "Closed by arrest", 
+                                                      "Open/No arrest"),
+                              labels = c("unsolved", "unsolved", "solved")))
+denver_disp
+```
+```{r}
+denver_map <- ggplot() + 
+              geom_sf(data = denver_zip, color = "lightgray") + 
+              geom_sf(data = denver_disp, aes(color = factor(victim_race)), show.legend = 'point')+
+                  facet_wrap(~disposition, ncol = 1)+
+                  ggtitle("Homicide cases in Denver, CO", subtitle = "(By Zipcode)")+
+                  labs(x = "Longitude", "Latitude")+
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+                  labs(colour = "Victim Race") 
+denver_map
+```
+
+
