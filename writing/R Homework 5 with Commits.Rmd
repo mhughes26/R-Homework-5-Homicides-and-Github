@@ -45,3 +45,13 @@ denver_zip <- zctas(cb = TRUE, starts_with = "802",
                     class = "sf")
 plot(denver_zip)
 ```
+
+```{r}
+#Separating the homicides into unsolved and solved. 
+denver_disp <- denver_crs %>% 
+  mutate(disposition = factor(disposition, levels = c("Closed without arrest",
+                                                      "Closed by arrest", 
+                                                      "Open/No arrest"),
+                              labels = c("unsolved", "unsolved", "solved")))
+denver_disp
+```
