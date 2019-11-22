@@ -29,5 +29,8 @@ denver <- denver %>%
   group_by(victim_race) %>% 
   mutate(count = n()) %>% #This function counted the number of homicides per race.
   arrange(desc(count)) %>% #This showed the race with the highest number of homicides on top. 
+   ungroup() %>% #Ungrouping keeps the data clean. 
+  filter(victim_race == c("Black", "White", "Hispanic")) 
+denver
 ```
 
