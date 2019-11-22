@@ -55,3 +55,20 @@ denver_disp <- denver_crs %>%
                               labels = c("unsolved", "unsolved", "solved")))
 denver_disp
 ```
+
+```{r}
+denver_map <- ggplot() + 
+              geom_sf(data = denver_zip, color = "lightgray") + 
+              geom_sf(data = denver_disp, aes(color = factor(victim_race)), show.legend = 'point')+
+                  facet_wrap(~disposition, ncol = 1)+
+                  ggtitle("Homicide cases in Denver, CO", subtitle = "(By Zipcode)")+
+                  labs(x = "Longitude", "Latitude")+
+                  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+                  labs(colour = "Victim Race") 
+denver_map
+```
+
+
+
+
+
