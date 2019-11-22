@@ -15,3 +15,6 @@ library(tigris)
 knitr::opts_chunk$set(echo = TRUE, options(tigris_use_cache = TRUE))
 ```
 
+```{r}
+cities <- read_csv("../data/homicide-data.csv")
+```
